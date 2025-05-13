@@ -6,7 +6,7 @@ class HashTable
     private array $table;
 
     // Size of the hash table (optional)
-    private int $size;
+    private int $size = 7;
 
     // Constructor to initialize the table
     public function __construct(int $size = 100)
@@ -15,9 +15,13 @@ class HashTable
     }
 
     // Hash function to convert key to index
-    private function hash(string $key)
+    private function hashCode(string $key): int
     {
-        // Return hashed index
+        $hash = 0;
+        for ($i = 0; $i < strlen($key); $i++) {
+            $hash = ($hash * 31 + ord($key[$i])) % $this->size;
+        }
+        return $hash;
     }
 
     // Set a key-value pair
