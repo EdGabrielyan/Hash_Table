@@ -2,19 +2,16 @@
 
 class HashTable
 {
-    // Storage array
     private array $table;
 
-    // Size of the hash table (optional)
-    private int $size = 7;
+    private int $size;
 
-    // Constructor to initialize the table
-    public function __construct(int $size = 100)
+    public function __construct(int $size = 13)
     {
-        // Initialize table and size
+        $this->size = $size;
+        $this->table = array_fill(0, $size, []);
     }
 
-    // Hash function to convert key to index
     private function hashCode(string $key): int
     {
         $hash = 0;
@@ -24,27 +21,50 @@ class HashTable
         return $hash;
     }
 
-    // Set a key-value pair
     public function set(string $key, mixed $value): void
     {
-        // Add key-value to the table
+        $index = $this->hashCode($key);
+
+        foreach ($this->table[$index] as &$pair) {
+            if ($pair[0] === $key) {
+                $pair[1] = $value;
+                return;
+            }
+        }
+
+        $this->table[$index][] = [$key, $value];
     }
 
-    // Get a value by key
-    public function get(string $key)
+    public function get(string $key): mixed
     {
-        // Retrieve value by key
+        $index = $this->hashCode($key);
+        foreach ($this->table[$index] as $pair) {
+            if ($pair[0] === $key) {
+                return $pair[1];
+            }
+        }
+        return null;
     }
 
-    // Remove a key-value pair
     public function remove(string $key): void
     {
-        // Remove key from table
+        $index = $this->hashCode($key);
+        foreach ($this->table[$index] as $i => $pair) {
+            if ($pair[0] === $key) {
+                array_splice($this->table[$index], $i, 1);
+                return;
+            }
+        }
     }
 
-    // Check if a key exists
-    public function has(string $key)
+    public function has(string $key): bool
     {
-        // Return true if key exists
+        $index = $this->hashCode($key);
+        foreach ($this->table[$index] as $pair) {
+            if ($pair[0] === $key) {
+                return true;
+            }
+        }
+        return false;
     }
 }
