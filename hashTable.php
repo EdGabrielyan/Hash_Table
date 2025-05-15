@@ -3,7 +3,6 @@
 class HashTable
 {
     private array $table;
-
     private int $size;
 
     public function __construct(int $size = 13)
